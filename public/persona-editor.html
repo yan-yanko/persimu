@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עורך פרסונות - Persimu</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/persona-editor.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">דף הבית</a></li>
+                <li><a href="personas.html">פרסונות</a></li>
+                <li><a href="simulations.html">סימולציות</a></li>
+                <li><a href="reports.html">דוחות</a></li>
+                <li><a href="support.html">תמיכה</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="editor-container">
+        <h1>עורך פרסונות</h1>
+        
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <button class="tab-button active" data-tab="basic">מידע בסיסי</button>
+                <button class="tab-button" data-tab="demographics">מידע דמוגרפי</button>
+                <button class="tab-button" data-tab="personality">אישיות והעדפות</button>
+                <button class="tab-button" data-tab="behavior">התנהגות צרכנית</button>
+                <button class="tab-button" data-tab="background">רקע והיסטוריה</button>
+                <button class="tab-button" data-tab="llm">הגדרות מודל השפה</button>
+            </div>
+
+            <form id="personaForm" class="persona-form">
+                <!-- מידע בסיסי -->
+                <div class="tab-content active" id="basic">
+                    <h2>מידע בסיסי</h2>
+                    <div class="form-group">
+                        <label for="name">שם הפרסונה *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">קטגוריה *</label>
+                        <select id="category" name="category" required>
+                            <option value="">בחר קטגוריה</option>
+                            <option value="B2B">B2B</option>
+                            <option value="B2C">B2C</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="shortDescription">תיאור קצר *</label>
+                        <textarea id="shortDescription" name="shortDescription" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageUrl">קישור לתמונה</label>
+                        <input type="url" id="imageUrl" name="imageUrl">
+                    </div>
+                </div>
+
+                <!-- מידע דמוגרפי -->
+                <div class="tab-content" id="demographics">
+                    <h2>מידע דמוגרפי</h2>
+                    <div class="form-group">
+                        <label for="age">גיל *</label>
+                        <input type="number" id="age" name="demographics.age" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">מגדר *</label>
+                        <select id="gender" name="demographics.gender" required>
+                            <option value="">בחר מגדר</option>
+                            <option value="זכר">זכר</option>
+                            <option value="נקבה">נקבה</option>
+                            <option value="אחר">אחר</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">מיקום *</label>
+                        <input type="text" id="location" name="demographics.location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation">עיסוק *</label>
+                        <input type="text" id="occupation" name="demographics.occupation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="education">השכלה</label>
+                        <input type="text" id="education" name="demographics.education">
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeLevel">רמת הכנסה</label>
+                        <select id="incomeLevel" name="demographics.incomeLevel">
+                            <option value="">בחר רמת הכנסה</option>
+                            <option value="נמוכה">נמוכה</option>
+                            <option value="בינונית">בינונית</option>
+                            <option value="גבוהה">גבוהה</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="familyStatus">מצב משפחתי</label>
+                        <input type="text" id="familyStatus" name="demographics.familyStatus">
+                    </div>
+                </div>
+
+                <!-- אישיות והעדפות -->
+                <div class="tab-content" id="personality">
+                    <h2>אישיות והעדפות</h2>
+                    <div class="form-group">
+                        <label for="traits">תכונות אופי</label>
+                        <input type="text" id="traits" name="personality.traits" placeholder="הפרד בפסיקים">
+                    </div>
+                    <div class="form-group">
+                        <label for="values">ערכים חשובים</label>
+                        <input type="text" id="values" name="personality.values" placeholder="הפרד בפסיקים">
+                    </div>
+                    <div class="form-group">
+                        <label for="interests">תחומי עניין</label>
+                        <input type="text" id="interests" name="personality.interests" placeholder="הפרד בפסיקים">
+                    </div>
+                    <div class="form-group">
+                        <label for="painPoints">נקודות כאב</label>
+                        <textarea id="painPoints" name="personality.painPoints" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="goals">מטרות ושאיפות</label>
+                        <textarea id="goals" name="personality.goals" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="communicationStyle">סגנון תקשורת</label>
+                        <select id="communicationStyle" name="personality.communicationStyle">
+                            <option value="">בחר סגנון תקשורת</option>
+                            <option value="פורמלי">פורמלי</option>
+                            <option value="ידידותי">ידידותי</option>
+                            <option value="ענייני">ענייני</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- התנהגות צרכנית -->
+                <div class="tab-content" id="behavior">
+                    <h2>התנהגות צרכנית</h2>
+                    <div class="form-group">
+                        <label for="purchaseMotivations">מוטיבציות לרכישה</label>
+                        <textarea id="purchaseMotivations" name="consumerBehavior.purchaseMotivations" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="decisionFactors">גורמים המשפיעים על החלטות</label>
+                        <textarea id="decisionFactors" name="consumerBehavior.decisionFactors" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="preferredChannels">ערוצי תקשורת מועדפים</label>
+                        <input type="text" id="preferredChannels" name="consumerBehavior.preferredChannels" placeholder="הפרד בפסיקים">
+                    </div>
+                    <div class="form-group">
+                        <label for="brandRelationships">יחס למותגים</label>
+                        <textarea id="brandRelationships" name="consumerBehavior.brandRelationships" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="priceStrategy">אסטרטגיית מחיר</label>
+                        <select id="priceStrategy" name="consumerBehavior.priceStrategy">
+                            <option value="">בחר אסטרטגיית מחיר</option>
+                            <option value="מחפש מבצעים">מחפש מבצעים</option>
+                            <option value="מוכן לשלם על איכות">מוכן לשלם על איכות</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="technicalSavviness">רמת בקיאות טכנולוגית</label>
+                        <select id="technicalSavviness" name="consumerBehavior.technicalSavviness">
+                            <option value="">בחר רמת בקיאות</option>
+                            <option value="נמוכה">נמוכה</option>
+                            <option value="בינונית">בינונית</option>
+                            <option value="גבוהה">גבוהה</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- רקע והיסטוריה -->
+                <div class="tab-content" id="background">
+                    <h2>רקע והיסטוריה</h2>
+                    <div class="form-group">
+                        <label for="bio">ביוגרפיה קצרה</label>
+                        <textarea id="bio" name="background.bio" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="keyExperiences">חוויות מפתח</label>
+                        <textarea id="keyExperiences" name="background.keyExperiences" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="challenges">אתגרים עיקריים</label>
+                        <textarea id="challenges" name="background.challenges" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="influences">השפעות חשובות</label>
+                        <textarea id="influences" name="background.influences" placeholder="הפרד בשורות חדשות"></textarea>
+                    </div>
+                </div>
+
+                <!-- הגדרות מודל השפה -->
+                <div class="tab-content" id="llm">
+                    <h2>הגדרות מודל השפה</h2>
+                    <div class="form-group">
+                        <label for="basePrompt">הנחיה בסיסית *</label>
+                        <textarea id="basePrompt" name="llmSettings.basePrompt" required rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="temperature">רמת יצירתיות (0-1)</label>
+                        <input type="number" id="temperature" name="llmSettings.temperature" min="0" max="1" step="0.1" value="0.7">
+                    </div>
+                    <div class="form-group">
+                        <label for="systemContext">הקשר מערכת</label>
+                        <textarea id="systemContext" name="llmSettings.systemContext" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxTokens">מספר מקסימלי של טוקנים</label>
+                        <input type="number" id="maxTokens" name="llmSettings.maxTokens" min="1" max="4000" value="1000">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" id="saveButton" class="primary-button">שמור</button>
+            <button type="button" id="resetButton" class="secondary-button">איפוס</button>
+            <button type="button" id="cancelButton" class="secondary-button">ביטול</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Persimu. כל הזכויות שמורות.</p>
+    </footer>
+
+    <script type="module" src="scripts/persona-editor.js"></script>
+</body>
+</html> 

@@ -1,0 +1,30 @@
+{
+  "name": "persimu",
+  "version": "1.0.0",
+  "description": "AI-Powered Persona Simulation Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "ai",
+    "simulation",
+    "persona"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.0",
+    "jest": "^29.7.0",
+    "playwright": "^1.41.0"
+  }
+}

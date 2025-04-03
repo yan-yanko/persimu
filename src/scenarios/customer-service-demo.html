@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הדגמת סימולציית שירות לקוחות</title>
+    <link rel="stylesheet" href="customer-service-demo.css">
+</head>
+<body>
+    <div class="demo-container">
+        <header class="demo-header">
+            <h1>הדגמת סימולציית שירות לקוחות</h1>
+            <div class="header-controls">
+                <button id="startSimulation" class="primary-btn">התחל סימולציה</button>
+                <button id="pauseSimulation" class="secondary-btn" disabled>השהה</button>
+                <button id="resetSimulation" class="secondary-btn">איפוס</button>
+            </div>
+        </header>
+
+        <main class="demo-content">
+            <div class="conversation-panel">
+                <div class="conversation-header">
+                    <div class="participant customer">
+                        <img src="assets/customer-avatar.png" alt="דני כהן">
+                        <span>דני כהן</span>
+                    </div>
+                    <div class="participant representative">
+                        <img src="assets/representative-avatar.png" alt="שירה לוי">
+                        <span>שירה לוי</span>
+                    </div>
+                </div>
+                <div class="conversation-messages" id="conversationMessages">
+                    <!-- הודעות יתווספו דינמית -->
+                </div>
+                <div class="conversation-input">
+                    <textarea id="messageInput" placeholder="הקלד הודעה..."></textarea>
+                    <button id="sendMessage" class="primary-btn">שלח</button>
+                </div>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-section">
+                    <h2>מידע על הלקוח</h2>
+                    <div class="customer-info" id="customerInfo">
+                        <!-- מידע יתווסף דינמית -->
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2>מדדים בזמן אמת</h2>
+                    <div class="metrics-grid" id="liveMetrics">
+                        <!-- מדדים יתווספו דינמית -->
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h2>אפשרויות פעולה</h2>
+                    <div class="action-buttons" id="actionButtons">
+                        <!-- כפתורי פעולה יתווספו דינמית -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <aside class="demo-sidebar">
+            <div class="sidebar-section">
+                <h2>תרחיש</h2>
+                <div class="scenario-info" id="scenarioInfo">
+                    <!-- מידע על התרחיש יתווסף דינמית -->
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>הערות והתערבויות</h2>
+                <div class="intervention-panel" id="interventionPanel">
+                    <!-- אפשרויות התערבות יתווספו דינמית -->
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h2>דוח סימולציה</h2>
+                <div class="simulation-report" id="simulationReport">
+                    <!-- דוח יתווסף דינמית -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script src="customer-service-demo.js"></script>
+</body>
+</html> 

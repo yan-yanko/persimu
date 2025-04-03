@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולציית תהליך רכישה - סמארט-הום</title>
+    <link rel="stylesheet" href="purchase-demo.css">
+</head>
+<body>
+    <div class="demo-container">
+        <!-- כותרת ושליטה -->
+        <header class="demo-header">
+            <h1>סימולציית תהליך רכישה</h1>
+            <div class="control-buttons">
+                <button id="startSimulation" class="btn primary">התחל סימולציה</button>
+                <button id="pauseSimulation" class="btn secondary" disabled>השהה</button>
+                <button id="resetSimulation" class="btn secondary">איפוס</button>
+            </div>
+        </header>
+
+        <!-- תוכן ראשי -->
+        <main class="demo-content">
+            <!-- מידע על המוצר -->
+            <section class="product-info">
+                <h2>סמארט-האב</h2>
+                <div class="product-details">
+                    <div class="price">₪1,299</div>
+                    <div class="features">
+                        <h3>תכונות עיקריות</h3>
+                        <ul>
+                            <li>שליטה מרחוק במכשירי חשמל</li>
+                            <li>מערכת אבטחה חכמה</li>
+                            <li>חיסכון באנרגיה</li>
+                            <li>תמיכה בקול</li>
+                        </ul>
+                    </div>
+                    <div class="reviews">
+                        <h3>חוות דעת</h3>
+                        <div class="rating">4.5 ⭐</div>
+                        <div class="review-count">128 חוות דעת</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- סימולציית לקוחות -->
+            <section class="customers-simulation">
+                <h2>סימולציית לקוחות</h2>
+                <div class="customers-grid" id="customersGrid">
+                    <!-- תוכן דינמי -->
+                </div>
+            </section>
+
+            <!-- מדדים בזמן אמת -->
+            <section class="live-metrics">
+                <h2>מדדים בזמן אמת</h2>
+                <div class="metrics-grid" id="liveMetrics">
+                    <!-- תוכן דינמי -->
+                </div>
+            </section>
+        </main>
+
+        <!-- סרגל צד -->
+        <aside class="demo-sidebar">
+            <!-- מידע על התרחיש -->
+            <section class="scenario-info">
+                <h2>מידע על התרחיש</h2>
+                <div id="scenarioInfo">
+                    <!-- תוכן דינמי -->
+                </div>
+            </section>
+
+            <!-- אפשרויות התערבות -->
+            <section class="intervention-options">
+                <h2>אפשרויות התערבות</h2>
+                <div class="intervention-controls">
+                    <div class="control-group">
+                        <label>מחיר</label>
+                        <input type="range" id="priceControl" min="999" max="1999" value="1299">
+                        <span id="priceValue">₪1,299</span>
+                    </div>
+                    <div class="control-group">
+                        <label>הנחה</label>
+                        <select id="discountControl">
+                            <option value="0">ללא הנחה</option>
+                            <option value="200">₪200 הנחה</option>
+                            <option value="300">₪300 הנחה</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>משלוח</label>
+                        <select id="shippingControl">
+                            <option value="50">משלוח רגיל (₪50)</option>
+                            <option value="0">איסוף עצמי (חינם)</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- דוח סימולציה -->
+            <section class="simulation-report">
+                <h2>דוח סימולציה</h2>
+                <div id="simulationReport">
+                    <!-- תוכן דינמי -->
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <script src="purchase-scenario.js"></script>
+    <script src="purchase-demo.js"></script>
+</body>
+</html> 

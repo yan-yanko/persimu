@@ -1,0 +1,37 @@
+[
+    {
+        "id": "1",
+        "name": "Danny Cohen",
+        "role": "Product Manager | B2B",
+        "personality": "Professional, decisive, results-oriented",
+        "background": "8 years of experience in product management in tech companies"
+    },
+    {
+        "id": "2",
+        "name": "Michelle Levy",
+        "role": "Marketing Manager | B2B",
+        "personality": "Creative, strategic, customer-focused",
+        "background": "10 years of B2B marketing experience"
+    },
+    {
+        "id": "3",
+        "name": "Alan David",
+        "role": "Potential Customer | B2C",
+        "personality": "Cautious, information-seeking, price-conscious",
+        "background": "Looking for a new home product"
+    },
+    {
+        "id": "4",
+        "name": "Rachel Green",
+        "role": "Procurement Manager | B2B",
+        "personality": "Analytical, precise, ROI-focused",
+        "background": "12 years of experience in organizational procurement"
+    },
+    {
+        "id": "5",
+        "name": "Nick Allen",
+        "role": "Loyal Customer | B2C",
+        "personality": "Brand loyal, quality-oriented",
+        "background": "Regular customer of company products"
+    }
+]

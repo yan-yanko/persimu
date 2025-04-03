@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Persimu - AI-Powered Persona Simulation Platform">
+    <title>Persimu - Persona Simulation Platform</title>
+    <div class="admin-menu">
+        <button onclick="window.location.href='simulation.html'">Simulation</button>
+        <button onclick="window.location.href='simulation-dashboard.html'">Dashboard</button>
+        <button onclick="window.location.href='environment-editor.html'">Environment Editor</button>
+        <button class="test-system" id="testSystem">System Test</button>
+    </div>
+
+    <header class="main-header">
+        <div class="logo">Persimu</div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Personas</a></li>
+                <li><a href="#">Simulations</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Support</a></li>
+            </ul>
+        </nav>
+        <div class="user-profile">
+            <a href="#">My Account</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="actions-bar">
+            <button class="create-btn">+ Create New Persona</button>
+            <div class="search-box">
+                <input type="text" placeholder="Search personas...">
+                <button class="search-btn">🔍</button>
+            </div>
+        </section>
+
+        <section class="categories">
+            <h2>My Personas</h2>
+            <div class="category-filters">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">B2B</button>
+                <button class="filter-btn">B2C</button>
+                <button class="filter-btn">Favorites</button>
+            </div>
+        </section>
+
+        <section class="personas-grid">
+            <!-- Persona Card #1 -->
+            <div class="persona-card" data-persona-id="1">
+                <div class="persona-avatar b2b-avatar">👨</div>
+                <h3 class="persona-name">Danny Cohen</h3>
+                <p class="persona-role">Product Manager | B2B</p>
+                <button class="start-btn">Start Simulation</button>
+            </div>
+
+            <!-- Persona Card #2 -->
+            <div class="persona-card" data-persona-id="2">
+                <div class="persona-avatar b2b-avatar female">👩</div>
+                <h3 class="persona-name">Michelle Levy</h3>
+                <p class="persona-role">Marketing Manager | B2B</p>
+                <button class="start-btn">Start Simulation</button>
+            </div>
+
+            <!-- Persona Card #3 -->
+            <div class="persona-card" data-persona-id="3">
+                <div class="persona-avatar b2c-avatar">👨</div>
+                <h3 class="persona-name">Alan David</h3>
+                <p class="persona-role">Hesitant Consumer | B2C</p>
+                <button class="start-btn">Start Simulation</button>
+            </div>
+
+            <!-- Persona Card #4 -->
+            <div class="persona-card" data-persona-id="4">
+                <div class="persona-avatar b2b-avatar female-alt">👩</div>
+                <h3 class="persona-name">Ronit Gal</h3>
+                <p class="persona-role">Procurement Manager | B2B</p>
+                <button class="start-btn">Start Simulation</button>
+            </div>
+
+            <!-- Persona Card #5 -->
+            <div class="persona-card" data-persona-id="5">
+                <div class="persona-avatar b2c-avatar male-alt">👨</div>
+                <h3 class="persona-name">Nir Alon</h3>
+                <p class="persona-role">Loyal Consumer | B2C</p>
+                <button class="start-btn">Start Simulation</button>
+            </div>
+
+            <!-- Add New Persona Card -->
+            <div class="persona-card add-new">
+                <div class="add-persona">+ New Persona</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Persimu &copy; 2025 - AI-Powered Persona Simulation Platform</p>
+    </footer>
+</head>
+</html> 

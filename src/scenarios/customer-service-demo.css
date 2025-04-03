@@ -1,0 +1,300 @@
+/**
+ * סגנונות לממשק הדגמת סימולציית שירות לקוחות
+ */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-color: #dee2e6;
+    --text-color: #212529;
+    --background-color: #f5f5f5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.demo-container {
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "main main sidebar"
+        "main main sidebar";
+    grid-template-columns: 1fr 1fr 300px;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* כותרת */
+.demo-header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.demo-header h1 {
+    margin: 0;
+    color: var(--dark-color);
+    font-size: 24px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+}
+
+/* תוכן ראשי */
+.demo-content {
+    grid-area: main;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+/* פאנל שיחה */
+.conversation-panel {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.conversation-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.participant {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.participant img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.conversation-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 5px;
+}
+
+.message.customer {
+    align-self: flex-end;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.message.representative {
+    align-self: flex-start;
+    background-color: var(--light-color);
+    color: var(--text-color);
+}
+
+.conversation-input {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+.conversation-input textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    resize: none;
+    height: 60px;
+}
+
+/* פאנל מידע */
+.info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.info-section h2 {
+    margin: 0 0 15px 0;
+    color: var(--dark-color);
+    font-size: 18px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.metric-card {
+    padding: 10px;
+    background-color: var(--light-color);
+    border-radius: 4px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.metric-label {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+/* סרגל צד */
+.demo-sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sidebar-section h2 {
+    margin: 0 0 15px 0;
+    color: var(--dark-color);
+    font-size: 18px;
+}
+
+/* כפתורים */
+.primary-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.secondary-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    background-color: white;
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondary-btn:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.secondary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 1200px) {
+    .demo-container {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar";
+        grid-template-columns: 1fr;
+    }
+
+    .demo-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* תמיכה במצב כהה */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #1a1a1a;
+        --text-color: #fff;
+        --border-color: #4d4d4d;
+        --light-color: #2d2d2d;
+    }
+
+    .demo-header,
+    .conversation-panel,
+    .info-section,
+    .sidebar-section {
+        background-color: #2d2d2d;
+    }
+
+    .message.representative {
+        background-color: #3d3d3d;
+        color: #fff;
+    }
+
+    .conversation-input textarea {
+        background-color: #3d3d3d;
+        color: #fff;
+        border-color: #4d4d4d;
+    }
+
+    .secondary-btn {
+        background-color: #3d3d3d;
+        color: #fff;
+        border-color: #4d4d4d;
+    }
+
+    .secondary-btn:hover {
+        background-color: #4d4d4d;
+    }
+} 
