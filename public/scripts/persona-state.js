@@ -105,6 +105,13 @@ export class PersonaState {
         this.stateChanges = [];
         this.lastUpdate = Date.now();
         
+        // הוספת פרמטרים חדשים
+        this.emotionTransitionThreshold = 0.3; // סף לשינוי רגשי
+        this.emotionDecayRate = 0.1; // קצב דעיכת רגשות
+        this.emotionHistoryMaxSize = 100; // גודל מקסימלי להיסטוריית רגשות
+        this.lastEmotionUpdate = Date.now();
+        this.emotionConsistencyChecks = [];
+        
         this.loadState();
     }
 
@@ -144,40 +151,170 @@ export class PersonaState {
     }
 
     /**
-     * Update emotional state based on interaction
-     * @param {string} message - User message
-     * @param {Object} context - Additional context
+     * עדכון מצב רגשי עם בדיקות עקביות
      */
     updateEmotionalState(message, context = {}) {
         const previousEmotion = this.currentEmotion;
         const emotionChange = this.analyzeEmotionalImpact(message, context);
         
-        // Apply emotion change with gradual transition
-        this.currentEmotion = this.calculateNewEmotion(emotionChange);
+        // בדיקת תקינות השינוי הרגשי
+        if (!this.isValidEmotionTransition(previousEmotion, emotionChange.emotion)) {
+            console.warn('Invalid emotion transition detected');
+            return;
+        }
+
+        // חישוב שינוי הדרגתי
+        const newEmotion = this.calculateGradualEmotionTransition(
+            previousEmotion,
+            emotionChange.emotion,
+            emotionChange.intensity
+        );
         
-        // Record state change
+        // עדכון המצב הרגשי
+        this.currentEmotion = newEmotion;
+        
+        // רישום שינוי המצב
         this.recordStateChange({
             timestamp: Date.now(),
             previousEmotion: previousEmotion.name,
             newEmotion: this.currentEmotion.name,
             trigger: message,
-            context
+            context,
+            transitionIntensity: emotionChange.intensity
         });
 
-        // Update emotion history
+        // עדכון היסטוריית רגשות
+        this.updateEmotionHistory(emotionChange);
+
+        // בדיקת עקביות
+        this.performEmotionConsistencyCheck();
+
+        // שמירת המצב
+        this.saveState();
+    }
+
+    /**
+     * בדיקת תקינות מעבר רגשי
+     */
+    isValidEmotionTransition(fromEmotion, toEmotion) {
+        // בדיקת מעברים לא הגיוניים
+        const invalidTransitions = {
+            'HAPPY': ['ANGRY', 'SAD'],
+            'SAD': ['HAPPY', 'ANGRY'],
+            'ANGRY': ['HAPPY', 'TRUSTING']
+        };
+
+        if (invalidTransitions[fromEmotion.name]?.includes(toEmotion.name)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * חישוב מעבר רגשי הדרגתי
+     */
+    calculateGradualEmotionTransition(fromEmotion, toEmotion, intensity) {
+        // אם השינוי קטן מדי, נשאר במצב הנוכחי
+        if (intensity < this.emotionTransitionThreshold) {
+            return fromEmotion;
+        }
+
+        // חישוב זמן שעבר מאז העדכון האחרון
+        const timeSinceLastUpdate = (Date.now() - this.lastEmotionUpdate) / 1000;
+        
+        // התאמת עוצמת השינוי לפי הזמן שעבר
+        const adjustedIntensity = intensity * Math.min(1, timeSinceLastUpdate / 5);
+        
+        // אם השינוי קטן מדי, נשאר במצב הנוכחי
+        if (adjustedIntensity < this.emotionTransitionThreshold) {
+            return fromEmotion;
+        }
+
+        // עדכון זמן העדכון האחרון
+        this.lastEmotionUpdate = Date.now();
+
+        return toEmotion;
+    }
+
+    /**
+     * עדכון היסטוריית רגשות
+     */
+    updateEmotionHistory(emotionChange) {
         this.emotionHistory.push({
             timestamp: Date.now(),
             emotion: this.currentEmotion.name,
-            intensity: emotionChange.intensity
+            intensity: emotionChange.intensity,
+            trigger: emotionChange.trigger
         });
 
-        // Trim history if needed
-        if (this.emotionHistory.length > 100) {
-            this.emotionHistory = this.emotionHistory.slice(-100);
+        // הגבלת גודל ההיסטוריה
+        if (this.emotionHistory.length > this.emotionHistoryMaxSize) {
+            this.emotionHistory = this.emotionHistory.slice(-this.emotionHistoryMaxSize);
+        }
+    }
+
+    /**
+     * בדיקת עקביות רגשית
+     */
+    performEmotionConsistencyCheck() {
+        const recentHistory = this.emotionHistory.slice(-5);
+        
+        // בדיקת תדירות שינויים
+        const timeBetweenChanges = recentHistory.map((entry, i) => 
+            i > 0 ? entry.timestamp - recentHistory[i-1].timestamp : 0
+        );
+        
+        const averageTimeBetweenChanges = timeBetweenChanges.reduce((a, b) => a + b, 0) / timeBetweenChanges.length;
+        
+        // אם השינויים תכופים מדי, נשמור את הבדיקה
+        if (averageTimeBetweenChanges < 1000) { // פחות משנייה בין שינויים
+            this.emotionConsistencyChecks.push({
+                timestamp: Date.now(),
+                type: 'RAPID_CHANGES',
+                details: {
+                    averageTime: averageTimeBetweenChanges,
+                    emotions: recentHistory.map(e => e.emotion)
+                }
+            });
         }
 
-        this.currentState.lastInteraction = new Date();
-        this.saveState();
+        // בדיקת מעברים לא הגיוניים
+        for (let i = 1; i < recentHistory.length; i++) {
+            if (!this.isValidEmotionTransition(
+                { name: recentHistory[i-1].emotion },
+                { name: recentHistory[i].emotion }
+            )) {
+                this.emotionConsistencyChecks.push({
+                    timestamp: Date.now(),
+                    type: 'INVALID_TRANSITION',
+                    details: {
+                        from: recentHistory[i-1].emotion,
+                        to: recentHistory[i].emotion
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * דעיכת רגשות לאורך זמן
+     */
+    decayEmotions() {
+        const timeSinceLastUpdate = (Date.now() - this.lastEmotionUpdate) / 1000;
+        
+        // אם עבר זמן רב, נחזור למצב ניטרלי בהדרגה
+        if (timeSinceLastUpdate > 300) { // 5 דקות
+            const decayFactor = Math.min(1, (timeSinceLastUpdate - 300) / 300);
+            this.currentEmotion = this.calculateGradualEmotionTransition(
+                this.currentEmotion,
+                EMOTIONAL_STATES.NEUTRAL,
+                decayFactor
+            );
+            
+            this.lastEmotionUpdate = Date.now();
+            this.saveState();
+        }
     }
 
     /**
@@ -209,25 +346,6 @@ export class PersonaState {
         }
 
         return { emotion, intensity };
-    }
-
-    /**
-     * Calculate new emotion based on impact
-     * @param {Object} impact - Emotional impact
-     * @returns {Object} New emotional state
-     */
-    calculateNewEmotion(impact) {
-        // Implement gradual transition between emotions
-        const currentEmotionValue = Object.values(EMOTIONAL_STATES).indexOf(this.currentEmotion);
-        const newEmotionValue = Object.values(EMOTIONAL_STATES).indexOf(impact.emotion);
-        
-        // If impact is strong enough, change emotion
-        if (Math.abs(impact.intensity) > 0.5) {
-            return impact.emotion;
-        }
-        
-        // Otherwise maintain current emotion
-        return this.currentEmotion;
     }
 
     /**

@@ -10,6 +10,8 @@ class PromptSystem {
         this.tokenMonitor = new TokenMonitor();
         this.contextManager = new ContextManager();
         this.personalityMapper = new PersonalityMapper();
+        this.maxTextLength = config.maxTextLength || 1000;
+        this.specialCharsRegex = /[^\w\s.,!?-]/g;
     }
 
     /**
@@ -26,12 +28,17 @@ class PromptSystem {
             personality
         } = config;
 
+        // טיפול בטקסט ארוך
+        const processedContext = this.handleLongText(context);
+        const processedMemories = await this.processMemories(memories);
+        const processedHistory = this.handleLongText(conversationHistory);
+
         // בניית prompt מודולרי
         const prompt = {
             identity: await this.buildIdentityModule(agentId, personality),
-            environment: await this.buildEnvironmentModule(context),
-            memory: await this.buildMemoryModule(memories),
-            conversation: await this.buildConversationModule(conversationHistory),
+            environment: await this.buildEnvironmentModule(processedContext),
+            memory: await this.buildMemoryModule(processedMemories),
+            conversation: await this.buildConversationModule(processedHistory),
             instructions: await this.buildInstructionsModule(instructions)
         };
 
@@ -42,6 +49,75 @@ class PromptSystem {
         this.cachePrompt(optimizedPrompt);
 
         return optimizedPrompt;
+    }
+
+    /**
+     * טיפול בטקסט ארוך
+     */
+    handleLongText(text) {
+        if (!text) return text;
+
+        // טיפול בתווים מיוחדים
+        text = this.handleSpecialCharacters(text);
+
+        // חלוקה לקטעים אם הטקסט ארוך מדי
+        if (text.length > this.maxTextLength) {
+            return this.splitLongText(text);
+        }
+
+        return text;
+    }
+
+    /**
+     * טיפול בתווים מיוחדים
+     */
+    handleSpecialCharacters(text) {
+        // החלפת תווים מיוחדים
+        text = text.replace(this.specialCharsRegex, ' ');
+
+        // הסרת רווחים מיותרים
+        text = text.replace(/\s+/g, ' ').trim();
+
+        return text;
+    }
+
+    /**
+     * חלוקת טקסט ארוך לקטעים
+     */
+    splitLongText(text) {
+        const chunks = [];
+        let currentChunk = '';
+        const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+
+        for (const sentence of sentences) {
+            if ((currentChunk + sentence).length > this.maxTextLength) {
+                if (currentChunk) {
+                    chunks.push(currentChunk.trim());
+                }
+                currentChunk = sentence;
+            } else {
+                currentChunk += ' ' + sentence;
+            }
+        }
+
+        if (currentChunk) {
+            chunks.push(currentChunk.trim());
+        }
+
+        return chunks;
+    }
+
+    /**
+     * עיבוד זיכרונות
+     */
+    async processMemories(memories) {
+        if (!Array.isArray(memories)) return [];
+
+        return memories.map(memory => ({
+            ...memory,
+            content: this.handleLongText(memory.content),
+            context: this.handleLongText(memory.context)
+        }));
     }
 
     /**
@@ -81,10 +157,21 @@ class PromptSystem {
         const baseTemplate = await this.getTemplate('memory');
         const relevantMemories = await this.filterRelevantMemories(memories);
         
+        // טיפול בזיכרונות ארוכים
+        const processedMemories = relevantMemories.map(memory => {
+            if (typeof memory.content === 'string' && memory.content.length > this.maxTextLength) {
+                return {
+                    ...memory,
+                    content: this.splitLongText(memory.content)[0] // לוקח רק את הקטע הראשון
+                };
+            }
+            return memory;
+        });
+        
         return {
             template: baseTemplate,
             params: {
-                memories: relevantMemories
+                memories: processedMemories
             }
         };
     }
@@ -94,12 +181,14 @@ class PromptSystem {
      */
     async buildConversationModule(history) {
         const baseTemplate = await this.getTemplate('conversation');
-        const compressedHistory = await this.compressConversationHistory(history);
+        const processedHistory = Array.isArray(history) ? 
+            history.map(h => this.handleLongText(h)) : 
+            this.handleLongText(history);
         
         return {
             template: baseTemplate,
             params: {
-                history: compressedHistory
+                history: processedHistory
             }
         };
     }
@@ -109,13 +198,47 @@ class PromptSystem {
      */
     async buildInstructionsModule(instructions) {
         const baseTemplate = await this.getTemplate('instructions');
+        const processedInstructions = this.handleLongText(instructions);
         
         return {
             template: baseTemplate,
             params: {
-                instructions: this.optimizeInstructions(instructions)
+                instructions: this.optimizeInstructions(processedInstructions)
             }
         };
+    }
+
+    /**
+     * אופטימיזציה של הנחיות
+     */
+    optimizeInstructions(instructions) {
+        if (!instructions) return '';
+
+        // הסרת רווחים מיותרים
+        instructions = instructions.replace(/\s+/g, ' ').trim();
+
+        // חלוקה למשפטים
+        const sentences = instructions.match(/[^.!?]+[.!?]+/g) || [];
+
+        // מיון משפטים לפי חשיבות
+        const sortedSentences = sentences.sort((a, b) => {
+            const aImportance = this.calculateSentenceImportance(a);
+            const bImportance = this.calculateSentenceImportance(b);
+            return bImportance - aImportance;
+        });
+
+        // החזרת המשפטים החשובים ביותר
+        return sortedSentences.slice(0, 5).join(' ');
+    }
+
+    /**
+     * חישוב חשיבות משפט
+     */
+    calculateSentenceImportance(sentence) {
+        const keywords = ['חשוב', 'חובה', 'נדרש', 'יש', 'צריך', 'אל'];
+        return keywords.reduce((score, keyword) => 
+            score + (sentence.includes(keyword) ? 2 : 0), 0
+        );
     }
 
     /**
